@@ -1,6 +1,6 @@
 import heapq
 
-def is_valid(row, col):
+def is_valid(row, col, ROW, COL):
     return 0 <= row < ROW and 0 <= col < COL
 
 def is_unblocked(grid, row, col):
@@ -21,7 +21,8 @@ def trace_path(parents, dest):
     return path[::-1]
 
 def a_star_search(grid, src, dest):
-    if not (is_valid(src[0], src[1]) and is_valid(dest[0], dest[1])):
+    ROW, COL = len(grid), len(grid[0])
+    if not (is_valid(src[0], src[1], ROW, COL) and is_valid(dest[0], dest[1], ROW, COL)):
         return "Source or destination is invalid"
     if not (is_unblocked(grid, src[0], src[1]) and is_unblocked(grid, dest[0], dest[1])):
         return "Source or the destination is blocked"
@@ -37,7 +38,7 @@ def a_star_search(grid, src, dest):
         closed_set.add((i, j))
         for dir in [(0, 1), (0, -1), (1, 0), (-1, 0), (1, 1), (1, -1), (-1, 1), (-1, -1)]:
             new_i, new_j = i + dir[0], j + dir[1]
-            if (is_valid(new_i, new_j) and is_unblocked(grid, new_i, new_j) and 
+            if (is_valid(new_i, new_j, ROW, COL) and is_unblocked(grid, new_i, new_j) and 
                 (new_i, new_j) not in closed_set):
                 g_new = f + 1.0
                 h_new = calculate_h_value(new_i, new_j, dest)
@@ -68,4 +69,3 @@ if isinstance(result, list):
     print("The Path is ", "->".join(map(str, result[1])))
 else:
     print(result)
-
